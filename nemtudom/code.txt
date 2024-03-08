@@ -1,0 +1,21 @@
+_EVENLABEL;
+	psn  #even;
+	jmp  @_EXIT;
+
+_ODDLABEL;
+	psn  #odd;
+	jmp  @_EXIT;
+
+_MAIN;
+	str  odd,  "Number is odd";
+	str  even, "Number is even";
+
+	var number, #70;
+	mod number, #2;
+
+	cmp number, #0;
+	jeq @_EVENLABEL;
+	jne @_ODDLABEL;
+
+_EXIT;
+	; Exit
