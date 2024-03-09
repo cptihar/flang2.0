@@ -6,6 +6,7 @@
 #include <unordered_map>
 
 #include "Tokenizer.h" // Token struct definition
+#include "ProgramStack.h"
 #include "ResourceManager.h"
 
 #define DEFAULT_VALUE		0b00000000
@@ -23,11 +24,6 @@
 
 namespace ex
 {
-	struct RetToken 
-	{
-		size_t return_position;
-		size_t mem_size_before;
-	};
 
 	class Branching
 	{
@@ -69,16 +65,15 @@ namespace ex
 			void l_jump_greater_or_equal();
 			void c_jump_greater_or_equal();
 
-			void r_return_instruction();
-
+			void r_clear_stack_instruction();
 			void r_push_stack();
-			void r_pop_stack();
 
 		private: // Variables
 			ex::ResourceManager  m_resourceManager;
-			std::stack<RetToken> m_iteratorStack;
+			std::stack<size_t>   m_iteratorStack;
 			const hlp::Token&    m_currentToken;
 			uint8_t              m_compareFlags;
+			ex::ProgramStack     m_programStack;
 
 		private: // References
 			LABEL_MAP&  m_labelMap;

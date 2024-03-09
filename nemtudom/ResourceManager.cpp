@@ -8,8 +8,8 @@ namespace ex {
 ex::ResourceManager::~ResourceManager()
 {
 	#if DEBUG_STATE
-	std::cout << "Total memory size: " << m_programMemory.size() << '\n';
-	std::cout << "Number of variables: " << m_variables.size() << '\n';
+		std::cout << "Total memory size: " << m_programMemory.size() << '\n';
+		std::cout << "Number of variables: " << m_variables.size() << '\n';
 	#endif
 
 	#if GET_MEM_STATE
@@ -49,11 +49,12 @@ void ex::ResourceManager::delete_memory(const size_t size)
 void ex::ResourceManager::c_create_variable(const std::string & variable_name, int32_t value)
 {
 	if (m_variables.count(variable_name)) {
-		throw std::logic_error("Variable '" +variable_name + "' already exists");
+		throw std::logic_error("Variable already exists");
 	}
 
 	m_variables[variable_name] = m_programMemory.size();
 	m_programMemory.push_back(value);
+	m_programStack.insertToScope(variable_name);
 }
 
 
@@ -77,6 +78,7 @@ void ex::ResourceManager::v_create_variable(const std::string& variable_name, co
 
 	m_variables[variable_name] = m_programMemory.size();
 	m_programMemory.push_back(m_programMemory[m_variables[value]]);
+	m_programStack.insertToScope(variable_name);
 }
 
 
@@ -156,7 +158,7 @@ void ex::ResourceManager::c_update_value(const size_t position, int32_t new_valu
 //  Return: int32_t (the value)
 // 
 ///===========================================
-const int32_t ex::ResourceManager::v_fetch_from_memory(const std::string variable_name)
+const int32_t ex::ResourceManager::v_fetch_from_memory(const std::string& variable_name)
 {
 	if (!m_variables.count(variable_name))
 		throw std::logic_error("Variable '" + variable_name + "'doesn't exist");
@@ -183,6 +185,23 @@ const int32_t ex::ResourceManager::c_fetch_from_memory(const size_t index)
 	return m_programMemory[index];
 }
 
+const size_t ex::ResourceManager::getPositionInMemory(const std::string& variable_name)
+{
+	if (!m_variables.count(variable_name))
+		throw std::logic_error("Variable not found");
+
+	return m_variables[variable_name];
+}
+
+//
+//
+//
+void ex::ResourceManager::dumpFixedMemoryToPosition(size_t start_position, const std::vector<int32_t>& mem)
+{
+	if (start_position > m_programMemory.size())
+		throw std::out_of_range("Start position is too big");
+	m_programMemory.insert(m_programMemory.begin() + start_position, mem.begin(), mem.end());
+}
 
 ///==========================
 // 
@@ -222,6 +241,22 @@ void ex::ResourceManager::dumpAdditionalMemory(size_t elements)
 void ex::ResourceManager::deleteMemoryInRange(size_t start, size_t size)
 {
 	m_programMemory.erase(m_programMemory.begin() + start, m_programMemory.begin() + size);
+}
+
+
+///====================================================
+// 
+//  Handles the deletion of variables when a scope ends
+// 
+//  Doesnt check for errors, previous functions do it
+// 
+//  Return: void
+//
+///====================================================
+void ex::ResourceManager::deleteScopedVariables()
+{
+	for (auto& s : m_programStack.getTop())
+		m_variables.erase(s);
 }
 
 

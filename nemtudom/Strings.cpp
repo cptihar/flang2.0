@@ -1,7 +1,8 @@
 #include "Strings.h"
 
 ex::Strings::Strings(const hlp::Token& curr_token)
-	:m_currentToken(curr_token)
+	:m_currentToken(curr_token), 
+     m_resourceManager()
 {}
 
 ex::Strings::~Strings()
@@ -29,11 +30,10 @@ void ex::Strings::create_string()
     auto represented = m_createIntRepresentation(data[1]);
 
     // Setup memory info
-    ex::ArrStruct mem_info = ex::ArrStruct(m_resourceManager.getMemorySize(), represented.size());
+    auto insert_start = m_resourceManager.getMemorySize();
 
-    // Store
-    m_stringMap[data[0]] = mem_info;
-    m_resourceManager.dumpFixedMemory(represented);
+    m_resourceManager.c_create_variable(data[0], 0);
+    m_resourceManager.dumpFixedMemoryToPosition(insert_start, represented);
 }
 
 
@@ -101,7 +101,7 @@ std::vector<std::string> ex::Strings::m_stringCreationHelper()
 
     // Check whether the string already exists or for invalid initialization value
 
-    if (m_stringMap.count(buffer[0]) || push_str.size() == 0)
+    if (push_str.size() == 0)
         throw std::logic_error("Error point");
 
     ret.emplace_back(buffer[0]);
@@ -150,71 +150,48 @@ std::vector<int32_t> ex::Strings::m_createIntRepresentation(const std::string & 
         ++counter;
     }
 
-    if (pdata != 0) 
+    // Str already contains 0 (end of string)
+    if (pdata != 0)
         ret.push_back(pdata);
+
+    // Insert 0 to mark end of the string
+    else 
+        ret.push_back(0);
 
     return ret;
 }
 
 
-///==================================================
-//
-//  Prints individual int representations of a string
-// 
-//  Return: void
-//
-///==================================================
-inline void ex::Strings::m_printCharacter(int32_t int_representation)
-{
-    for (int8_t shift_value = 0; shift_value < 4; ++shift_value) {
-        char value = (int_representation >> (shift_value * CHAR_SIZE_IN_BITS));
-
-        if (value == 0)
-            break;
-
-        std::cout << value;
-    }
-}
-
-
-///==============================================
-//
-//  Fetches important data related to the string
-// 
-//  Validates the string (whether it exists etc.)
-// 
-//  Throws: std::logic_error
-//  Return: ex::ArrStruct
-//
-///==============================================
-ex::ArrStruct ex::Strings::m_fetchStringData(const std::string& str)
-{
-    // Check whether the string exists
-    if (!m_stringMap.count(str))
-        throw std::logic_error("String with this name doesn't exist");
-
-    return m_stringMap[str];
-}
-
-
-///===========================================
+///==========================================================
 //
 //  Prints out the int representation by bytes
 //
 //  Doesn't add new line to the end
 //  Doesn't do error checking
+//  0 has to be present otherwise it will fuck up the program
 //  (Has to be made before calling)
 // 
 //  Return: void
 //
-///===========================================
+///==========================================================
 inline void ex::Strings::m_printString()
 {
     auto data = m_resourceManager.getSpacelessBuffer(m_currentToken.value_buffer);
+    size_t start_position = m_resourceManager.getPositionInMemory(data.substr(1, data.size()));
+    int32_t counter = 0;
 
-    ex::ArrStruct printable_str = m_fetchStringData(data.substr(1, data.size()));
-    size_t interation_end = printable_str._memStart + printable_str._size;
+    while (true) {
 
-    for (size_t j = printable_str._memStart; j < interation_end; ++j)
-        m_printCharacter(m_resourceManager.c_fetch_from_memory(j));
+        int32_t current_block = m_resourceManager.c_fetch_from_memory(start_position + counter);
+
+        for (int8_t shift_value = 0; shift_value < 4; ++shift_value) {
+            char value = (current_block >> (shift_value * CHAR_SIZE_IN_BITS));
+
+            if (value == 0)
+                return;
+
+            std::cout << value;
+        }
+        ++counter;
+    }
 }

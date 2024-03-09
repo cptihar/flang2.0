@@ -24,15 +24,12 @@ namespace ex
 			void print_string_with_newline();
 
 		private: // Private variables
-			std::unordered_map<std::string, ex::ArrStruct>  m_stringMap;
-			ex::ResourceManager								m_resourceManager;
-			const hlp::Token&								m_currentToken;
+			ex::ResourceManager  m_resourceManager;
+			const hlp::Token&    m_currentToken;
 
 		private: // Helpers
 			std::vector<std::string>  m_stringCreationHelper();
 			std::vector<int32_t>	  m_createIntRepresentation(const std::string& str);
-			ex::ArrStruct		      m_fetchStringData(const std::string& str);
-			inline void				  m_printCharacter(int32_t int_representation);
 			inline void			      m_printString();
 	};
 }

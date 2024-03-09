@@ -120,7 +120,6 @@ void ex::Interpreter::m_bindHashFunctions()
 {
 	// Variables
 	m_hashedFunctions[PVA_V] = std::bind(&ex::Variables::v_print_as_number, &m_variableHandler);
-	m_hashedFunctions[DEL_V] = std::bind(&ex::Variables::v_delete_variable, &m_variableHandler);
 	m_hashedFunctions[VAR_C] = std::bind(&ex::Variables::c_create_variable, &m_variableHandler);
 	m_hashedFunctions[VAR_V] = std::bind(&ex::Variables::v_create_variable, &m_variableHandler);
 
@@ -168,10 +167,9 @@ void ex::Interpreter::m_bindHashFunctions()
 	m_hashedFunctions[JGR_L] = std::bind(&ex::Branching::l_jump_greater, &m_branchingHandler);
 	m_hashedFunctions[JMP_C] = std::bind(&ex::Branching::c_jump, &m_branchingHandler);
 	m_hashedFunctions[JMP_L] = std::bind(&ex::Branching::l_jump, &m_branchingHandler);
-	m_hashedFunctions[RET_S] = std::bind(&ex::Branching::r_return_instruction, &m_branchingHandler);
-
+	
+	m_hashedFunctions[CST_R] = std::bind(&ex::Branching::r_clear_stack_instruction, &m_branchingHandler);
 	m_hashedFunctions[PSH_R] = std::bind(&ex::Branching::r_push_stack, &m_branchingHandler);
-	m_hashedFunctions[PPS_R] = std::bind(&ex::Branching::r_pop_stack, &m_branchingHandler);
 
 	// Arrays
 	m_hashedFunctions[ARR_C] = std::bind(&ex::Arrays::c_create_array, &m_arrayHandler);

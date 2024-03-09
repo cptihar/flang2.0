@@ -4,7 +4,8 @@ ex::Branching::Branching(const hlp::Token& curr_token, LABEL_MAP& mp, size_t& it
 	:m_currentToken(curr_token), 
 	 m_compareFlags(DEFAULT_VALUE),
 	 m_labelMap(mp),
-	 m_instructionPointer(it)
+	 m_instructionPointer(it),
+	 m_resourceManager()
 {}
 
 ex::Branching::~Branching()
@@ -177,25 +178,26 @@ void ex::Branching::c_jump_greater_or_equal()
 
 ///==================================
 //
-//  Handles return instruction
+//  Handles stack clear instruction
 // 
 //  Deletes memory that was allocated
 // 
 //  Return: void
 //
 ///==================================
-void ex::Branching::r_return_instruction()
+void ex::Branching::r_clear_stack_instruction()
 {
 	// Extract values
-	size_t return_position = m_iteratorStack.top().return_position;
-	size_t delete_size = m_resourceManager.getMemorySize() - m_iteratorStack.top().mem_size_before;
+	size_t return_position = m_iteratorStack.top();
+	size_t delete_size = m_resourceManager.getMemorySize() - m_iteratorStack.top();
 
-	// Handle jump back
-	m_instructionPointer = return_position;
+	// Handle scoping
 	m_resourceManager.delete_memory(delete_size);
+	m_resourceManager.deleteScopedVariables();
 
 	// Pop
 	m_iteratorStack.pop();
+	m_programStack.popStack();
 }
 
 
@@ -211,24 +213,8 @@ void ex::Branching::r_return_instruction()
 void ex::Branching::r_push_stack()
 {
 	// Push to the stack
-	m_iteratorStack.push({ m_instructionPointer, m_resourceManager.getMemorySize() });
-}
-
-
-///====================================================================
-//
-//  It will pops the stack
-//  Does not delete memory!!! (ret does it)
-// 
-//  Does not check for errors
-//  (If the stack is empty program will crash anyways (should be fine))
-//
-//  Return: void
-//
-///====================================================================
-void ex::Branching::r_pop_stack()
-{
-	m_iteratorStack.pop();
+	m_iteratorStack.push(m_resourceManager.getMemorySize());
+	m_programStack.addScope();
 }
 
 

@@ -4,6 +4,7 @@
 #include <algorithm>
 
 #include "ResourceManager.h"
+#include "ProgramStack.h"
 #include "Tokenizer.h"
 
 namespace ex
@@ -35,13 +36,12 @@ namespace ex
 			void c_equ_value();
 			void v_equ_value();
 
-			void v_delete_variable();
-
 			void v_print_as_number(); // PVA (print var)
 
 		private:
 			ex::ResourceManager  m_resourceManager;
 			const hlp::Token&	 m_currentToken;
+			ex::ProgramStack	 m_programStack;
 	};
 }
 #endif // !VARIABLES_H

@@ -7,6 +7,7 @@
 #include <unordered_map>
 #include <iostream>
 
+#include "ProgramStack.h"
 #include "Instructions.h"
 
 namespace ex
@@ -28,12 +29,15 @@ namespace ex
 			void  c_update_value(const size_t position, int32_t new_value);
 
 
-			const int32_t v_fetch_from_memory(const std::string variable_name);
+			const int32_t v_fetch_from_memory(const std::string& variable_name);
 			const int32_t c_fetch_from_memory(const size_t index);
+			const size_t  getPositionInMemory(const std::string& variable_name);
 
+			void  dumpFixedMemoryToPosition(size_t start_position, const std::vector<int32_t>& mem);
 			void  dumpFixedMemory(std::vector<int32_t> mem);
 			void  dumpAdditionalMemory(size_t elements);
 			void  deleteMemoryInRange(size_t start, size_t size);
+			void  deleteScopedVariables();
 
 			const size_t  getMemorySize() const
 			{  return m_programMemory.size();  }
@@ -47,8 +51,7 @@ namespace ex
 
 			static std::unordered_map<std::string, size_t>  m_variables;
 			static std::vector<int32_t>						m_programMemory;
-
-		private: // Registers
+			ex::ProgramStack								m_programStack;
 	};
 }
 #endif // ! RESOURCE_MANAGER_H

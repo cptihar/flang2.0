@@ -351,23 +351,15 @@ void ex::Variables::v_equ_value()
 }
 
 
-///==================================================
+///====================================================================
 //
-//  Handles variable deletion
-//  Useful when returns happen
+//  Handles variable printing
 // 
-//  Invokes: del varname;
+//  Whether the variable exists or not is checked by external functions
 // 
-//  Return doesn't delete the variables automatically
-//		-> Variable promotion (feature)
+//  Return: void
 //
-///==================================================
-void ex::Variables::v_delete_variable()
-{
-	auto buffer = m_resourceManager.getSpacelessBuffer(m_currentToken.value_buffer);
-	m_resourceManager.deleteVariable(buffer);
-}
-
+///====================================================================
 void ex::Variables::v_print_as_number()
 {
 	auto buffer = m_resourceManager.getSpacelessBuffer(m_currentToken.value_buffer);
