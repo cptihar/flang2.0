@@ -31,3 +31,4 @@ _MAIN;
 
 _EXIT;
 	; Exit
+	cst^;
