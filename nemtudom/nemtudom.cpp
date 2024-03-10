@@ -7,11 +7,16 @@
 
 #define LOG(message) std::cout << "[ERROR] " << message << std::endl;
 
-int main(void)
+int main(int argc, char** argv)
 {
-    const std::string code = "code.txt"; // later use commandline args
+   // const std::string code = "code.txt"; // later use commandline args
 
-    hlp::Loader ld(code.c_str()); // File loader, transformer
+    if (argc < 2) {
+        LOG("Please provide a file");
+        return EXIT_FAILURE;
+    }
+
+    hlp::Loader ld(argv[1]); // File loader, transformer
     
 
     auto raw_code = ld.rawCode(); // Extract raw code

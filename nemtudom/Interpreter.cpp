@@ -7,7 +7,8 @@ ex::Interpreter::Interpreter(const std::vector<hlp::Token>& tokenized)
 	  m_containsWanderingCode(false),
 	  m_branchingHandler(m_currentToken, m_labelPositions, m_instructionPointer),
 	  m_arrayHandler(m_currentToken),
-	  m_stringHandler(m_currentToken)
+	  m_stringHandler(m_currentToken),
+	  m_arrayRegisterHandler(m_currentToken)
 {
 
 	// Bind the necessary things
@@ -177,4 +178,13 @@ void ex::Interpreter::m_bindHashFunctions()
 	m_hashedFunctions[STR_V] = std::bind(&ex::Strings::create_string, &m_stringHandler);
 	m_hashedFunctions[PRS_C] = std::bind(&ex::Strings::print_string, &m_stringHandler);
 	m_hashedFunctions[PSN_C] = std::bind(&ex::Strings::print_string_with_newline, &m_stringHandler);
+
+	// Registers
+	m_hashedFunctions[MAR_V] = std::bind(&ex::ArrayRegister::move_register_to_array, &m_arrayRegisterHandler);
+	m_hashedFunctions[URI_V] = std::bind(&ex::ArrayRegister::update_array_register_index, &m_arrayRegisterHandler);
+	m_hashedFunctions[FVR_V] = std::bind(&ex::ArrayRegister::fetch_value_from_index, &m_arrayRegisterHandler);
+	m_hashedFunctions[PVR_R] = std::bind(&ex::ArrayRegister::push_value_from_register, &m_arrayRegisterHandler);
+	m_hashedFunctions[PRV_R] = std::bind(&ex::ArrayRegister::print_value_at_index, &m_arrayRegisterHandler);
+	m_hashedFunctions[EXP_V] = std::bind(&ex::ArrayRegister::export_to_variable, &m_arrayRegisterHandler);
+	m_hashedFunctions[SRV_V] = std::bind(&ex::ArrayRegister::set_register_value, &m_arrayRegisterHandler);
 } // Xd

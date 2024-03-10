@@ -84,6 +84,16 @@
 #define PSH_R "psh5"  // Push current position to the stack
 #define PPS_R "pps5"  // Pop stack
 
+// Registers
+
+#define MAR_V "mar2"  // Move arr regsiter (move it to the start of the array)
+#define URI_V "uri2"  // Update array index
+#define PVR_R "pvr5"  // Push value from register to array at index
+#define FVR_V "fvi2"  // fetch value to reigster
+#define PRV_R "prv5"  // Print value at index
+#define EXP_V "exp2"  // Export value at register to a variable (syntax: exp variable_name)
+#define SRV_V "srv2"  // Set registers value to a variable
+
 
 //|---------- Label Rules ----------|
 // 

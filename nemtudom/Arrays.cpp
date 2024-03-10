@@ -1,7 +1,7 @@
 #include "Arrays.h"
 
 ex::Arrays::Arrays(const hlp::Token& curr_token)
-	:m_currentToken(curr_token), m_resourceManager()
+	:m_currentToken(curr_token), m_resourceManager(), m_registerHandler()
 {}
 
 ex::Arrays::~Arrays()

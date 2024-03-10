@@ -2,7 +2,7 @@
 
 ex::Branching::Branching(const hlp::Token& curr_token, LABEL_MAP& mp, size_t& it)
 	:m_currentToken(curr_token), 
-	 m_compareFlags(DEFAULT_VALUE),
+	 m_comparisonFlags(DEFAULT_VALUE),
 	 m_labelMap(mp),
 	 m_instructionPointer(it),
 	 m_resourceManager()
@@ -59,12 +59,12 @@ void ex::Branching::v_compare_values()
 ///=============================
 void ex::Branching::l_jump()
 {
-	m_executeLabelJump(m_compareFlags);
+	m_executeLabelJump(m_comparisonFlags);
 }
 
 void ex::Branching::c_jump()
 {
-	m_executeConstantJump(m_compareFlags);
+	m_executeConstantJump(m_comparisonFlags);
 }
 
 
@@ -229,18 +229,18 @@ void ex::Branching::r_push_stack()
 ///=====================================
 void ex::Branching::m_makeComparison(const int32_t var1, const int32_t var2)
 {
-	m_compareFlags = 0; // Reset flags
+	m_comparisonFlags = 0; // Reset flags
 	// Equality
-	m_compareFlags |= JUMP_EQUAL * (var1 == var2);
-	m_compareFlags |= JUMP_NOT_EQUAL * (var1 != var2);
+	m_comparisonFlags |= JUMP_EQUAL * (var1 == var2);
+	m_comparisonFlags |= JUMP_NOT_EQUAL * (var1 != var2);
 
 	// Greater and smaller
-	m_compareFlags |= JUMP_GREATER * (var1 > var2);
-	m_compareFlags |= JUMP_SMALLER * (var1 < var2);
+	m_comparisonFlags |= JUMP_GREATER * (var1 > var2);
+	m_comparisonFlags |= JUMP_SMALLER * (var1 < var2);
 
 	// Greater and smaller + equality
-	m_compareFlags |= JUMP_GREATER_EQUAL * (var1 >= var2);
-	m_compareFlags |= JUMP_SMALLER_EQUAL * (var1 <= var2);
+	m_comparisonFlags |= JUMP_GREATER_EQUAL * (var1 >= var2);
+	m_comparisonFlags |= JUMP_SMALLER_EQUAL * (var1 <= var2);
 }
 
 
@@ -259,7 +259,7 @@ void ex::Branching::m_executeConstantJump(uint8_t flag)
 
 	int64_t jump_value = std::stoi(buffer.substr(1, buffer.size()));
 
-	m_instructionPointer += jump_value * ((m_compareFlags & flag) == flag);
+	m_instructionPointer += jump_value * ((m_comparisonFlags & flag) == flag);
 }
 
 
@@ -283,5 +283,5 @@ inline void ex::Branching::m_executeLabelJump(uint8_t flag)
 	size_t label_position = m_labelMap[label_name];
 	int64_t jump_factor = label_position - m_instructionPointer;
 
-	m_instructionPointer += jump_factor * ((m_compareFlags & flag) == flag);
+	m_instructionPointer += jump_factor * ((m_comparisonFlags & flag) == flag);
 }

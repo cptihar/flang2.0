@@ -33,7 +33,7 @@ namespace ex
 
 			// Reset flags
 			void clear_comparison_flags() 
-			{ m_compareFlags = DEFAULT_VALUE; }
+			{ m_comparisonFlags = DEFAULT_VALUE; }
 
 			// Comparisons
 
@@ -72,7 +72,7 @@ namespace ex
 			ex::ResourceManager  m_resourceManager;
 			std::stack<size_t>   m_iteratorStack;
 			const hlp::Token&    m_currentToken;
-			uint8_t              m_compareFlags;
+			uint8_t              m_comparisonFlags;
 			ex::ProgramStack     m_programStack;
 
 		private: // References

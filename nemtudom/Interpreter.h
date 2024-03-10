@@ -5,7 +5,7 @@
 #include <functional>
 #include <unordered_map>
 
-
+#include "ArrayRegister.h"
 #include "Tokenizer.h" // Include token struct
 #include "Variables.h"
 #include "Branching.h"
@@ -40,6 +40,7 @@ namespace ex
 			ex::Branching					m_branchingHandler;
 			ex::Arrays						m_arrayHandler;
 			ex::Strings						m_stringHandler;
+			ex::ArrayRegister				m_arrayRegisterHandler;
 
 		private: // Important hash maps
 			std::unordered_map<std::string, std::function<void()>>  m_hashedFunctions;

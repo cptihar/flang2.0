@@ -1,27 +1,34 @@
-_EVENLABEL;
-	psh^                         ; Push new scope
-	str even, "Number is even"   ; Create a string, assign "even to it"
-	psn #even                    ; Print String new Line
-	cst^                         ; Clear the current scope (deletes everything that was allocated since the last psh^ instruction)
-	jmp @_EXIT                   ; Jump to exit
+_FILL_ARRAY_ELEMENTS;
+	uri index;
+	srv index;
+	pvr^;
 
-_ODDLABEL;
-	psh^;
-	str odd, "Number is odd";
-	psn #odd;
-	cst^;
+	add index, #1;
+	cmp index, array_size;
+	jne @_FILL_ARRAY_ELEMENTS;
+	equ index, #0;
+	jmp @_PRINT;
+
+_PRINT;
+	uri index;
+	srv index;
+	prv^;
+	add index, #1;
+	cmp index, array_size;
+	jne @_PRINT;
 	jmp @_EXIT;
 
 _MAIN;
-	psh^               ; Push new scope
-	var n, #6          ; Create new variable named n, assign 6 to it
-	mod n, #2          ; Perform modulo operation on it. Result is stored in n
+	psh^;
+	var array_size, #10;
+	var temp, #60;
+	var index, #0;
 
-	cmp n, #0          ; Perform comparison
-	cst^               ; Clear the current scope (deletes everything that was allocated since the last psh^ instruction)
+	arr my_arr, array_size;
+	mar my_arr;
+	jmp @_FILL_ARRAY_ELEMENTS;;
 
-	jeq @_EVENLABEL    ; Jump to even label if the equal result flag is set
-	jne @_ODDLABEL     ; Jump to odd label if the equal result flag is set
 
 _EXIT;
+	cst^;
 	; Exit
