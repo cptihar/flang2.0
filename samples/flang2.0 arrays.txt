@@ -1,0 +1,33 @@
+_FILL_ARRAY_ELEMENTS;
+	uri index;
+	srv index;
+	pvr^;
+
+	add index, #1;
+	cmp index, array_size;
+	jne @_FILL_ARRAY_ELEMENTS;
+	equ index, #0;
+	jmp @_PRINT;
+
+_PRINT;
+	uri index;
+	srv index;
+	prv^;
+	add index, #1;
+	cmp index, array_size;
+	jne @_PRINT;
+	jmp @_EXIT;
+
+_MAIN;
+	psh^;
+	var array_size, #10;
+	var temp, #60;
+	var index, #0;
+
+	arr my_arr, array_size;
+	mar my_arr;
+	jmp @_FILL_ARRAY_ELEMENTS;;
+
+
+_EXIT;
+	; Exit

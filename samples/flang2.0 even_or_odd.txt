@@ -1,0 +1,27 @@
+_EVENLABEL;
+	psh^                         ; Push new scope
+	str even, "paros"            ;   Create a string, assign "even to it"
+	psn #even                    ; Print String new Line
+	cst^                         ; Clear the current scope (deletes everything that was allocated since the last psh^ instruction)
+	jmp @_EXIT                   ; Jump to exit
+
+_ODDLABEL;
+	psh^;
+	str odd, "paratlan";
+	psn #odd;
+	cst^;
+	jmp @_EXIT;
+
+_MAIN;
+	psh^               ; Push new scope
+	var n, #7          ; Create new variable named n, assign 6 to it
+	mod n, #2          ; Perform modulo operation on it. Result is stored in n
+
+	cmp n, #0          ; Perform comparison
+	cst^               ; Clear the current scope (deletes everything that was allocated since the last psh^ instruction)
+
+	jeq @_EVENLABEL    ; Jump to even label if the equal result flag is set
+	jne @_ODDLABEL     ; Jump to odd label if the equal result flag is set
+
+_EXIT;
+	; Exit

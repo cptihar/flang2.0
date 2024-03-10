@@ -1,0 +1,3 @@
+_MAIN;
+	str hello, "Hello World!";
+	prs #hello;
