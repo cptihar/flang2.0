@@ -34,7 +34,6 @@ namespace ex
 			size_t  m_memoryStart; // Variables name
 			size_t  m_currentIndex;
 			uint32_t  m_registerValue;
-			ex::ResourceManager  m_resourceManager;
 	};
 }
 #endif // ! TREGSITER_H
