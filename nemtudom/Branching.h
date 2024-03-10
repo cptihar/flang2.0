@@ -9,7 +9,7 @@
 #include "ProgramStack.h"
 #include "ResourceManager.h"
 
-#define DEFAULT_VALUE		0b00000000
+#define DEFAULT_VALUE	    0b00000000
 
 #define JUMP_EQUAL          0b10000000
 #define JUMP_NOT_EQUAL      0b01000000
@@ -77,7 +77,7 @@ namespace ex
 
 		private: // References
 			LABEL_MAP&  m_labelMap;
-			size_t&		m_instructionPointer;
+			size_t&	    m_instructionPointer;
 
 		private: // Functions
 			void         m_makeComparison(const int32_t var1, const int32_t var2);
